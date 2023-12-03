@@ -470,7 +470,7 @@ class _GetOrderState extends State<GetOrder> {
                             ),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
                           Container(
                               padding: EdgeInsets.all(1),
@@ -489,7 +489,7 @@ class _GetOrderState extends State<GetOrder> {
                                 ),
                               )),
                           SizedBox(
-                            width: 15,
+                            width: 5,
                           ),
                           Container(
                               width: 80,
@@ -576,7 +576,7 @@ class _GetOrderState extends State<GetOrder> {
                                 ],
                               )),
                           SizedBox(
-                            width: 15,
+                            width: 5,
                           ),
                           Container(
                               width: 50,
@@ -593,6 +593,21 @@ class _GetOrderState extends State<GetOrder> {
                                       fontWeight: FontWeight.w500),
                                 ),
                               )),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    myDartState.tables?[widget.tableno]?.items
+                                        ?.removeAt(index);
+                                    myDartState.tables?[widget.tableno]
+                                        ?.getTotal();
+                                  });
+                                },
+                                icon: Icon(Icons.delete_forever)),
+                          )
                         ],
                       ),
                     );
