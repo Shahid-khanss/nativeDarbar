@@ -651,33 +651,30 @@ class _GetOrderState extends State<GetOrder> {
             children: [
               sortedList.length > 0
                   ? Container(
-                      width: 300,
-                      height: 200,
-                      color: Colors.red[100],
+                      width: MediaQuery.of(context).size.width * .8,
+                      height: 300,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 5.0,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(10)),
                       child: ListView.builder(
                         itemBuilder: (BuildContext context, int index) {
                           return
                               // Text(sortedList[index].toString());
                               Container(
-                            color: Colors.blue[50],
-                            margin: EdgeInsets.all(5),
+                            // color: Colors.blue[50],
+                            // margin: EdgeInsets.all(5),
                             child: ListTile(
                               // tileColor: Colors.red,
                               // contentPadding: EdgeInsets.all(5),
                               leading: Icon(Icons.local_dining),
                               trailing: IconButton(
                                   onPressed: () {
-                                    // setState(() {
-                                    //   myState[tableno]["items"].add({
-                                    //     "dish": sortedList[index]["dish"],
-                                    //     "rate":
-                                    //         sortedList[index]["rate"] as double,
-                                    //     "qty": 1,
-                                    //     "amount":
-                                    //         sortedList[index]["rate"] as double
-                                    //   });
-                                    // });
-
                                     setState(() {
                                       myDartState.tables?[widget.tableno]?.items
                                           ?.add(Item(
@@ -701,6 +698,9 @@ class _GetOrderState extends State<GetOrder> {
                         itemCount: sortedList.length,
                       ))
                   : SizedBox(),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 color: Colors.blueAccent,
                 height: 55,
