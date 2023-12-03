@@ -469,9 +469,9 @@ class _GetOrderState extends State<GetOrder> {
                                   fontSize: 15, fontWeight: FontWeight.w500),
                             ),
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          // SizedBox(
+                          //   width: 5,
+                          // ),
                           Container(
                               padding: EdgeInsets.all(1),
                               decoration: BoxDecoration(
@@ -593,9 +593,9 @@ class _GetOrderState extends State<GetOrder> {
                                       fontWeight: FontWeight.w500),
                                 ),
                               )),
-                          SizedBox(
-                            width: 20,
-                          ),
+                          // SizedBox(
+                          //   width: 1,
+                          // ),
                           Expanded(
                             child: IconButton(
                                 onPressed: () {
@@ -619,7 +619,7 @@ class _GetOrderState extends State<GetOrder> {
           ],
         ),
         Positioned(
-          bottom: 70,
+          bottom: 65,
           right: 10,
           child: Container(
             decoration: BoxDecoration(
@@ -738,3 +738,116 @@ class _GetOrderState extends State<GetOrder> {
     );
   }
 }
+
+//-----------------------Slider Button Widget------------------------------------------------------------------------->>>>
+class SlideToContinueButton extends StatefulWidget {
+  @override
+  _SlideToContinueButtonState createState() => _SlideToContinueButtonState();
+}
+
+class _SlideToContinueButtonState extends State<SlideToContinueButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  bool _showOrderText = false;
+  bool _hideSlideText = false;
+  late Offset _dragStart;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(1.0, 0.0),
+    ).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            _showOrderText = true;
+            _hideSlideText = true;
+          });
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    final dx = details.globalPosition.dx - _dragStart.dx;
+    double slidePercent = dx / context.size!.width;
+    slidePercent = slidePercent.clamp(0.0, 1.0);
+    _controller.value = slidePercent;
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    if (_controller.value < 1.0) {
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragDown: (details) {
+        _dragStart = details.globalPosition;
+      },
+      onHorizontalDragUpdate: _onHorizontalDragUpdate,
+      onHorizontalDragEnd: _onHorizontalDragEnd,
+      child: Container(
+        height: 50.0,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (!_hideSlideText)
+              ClipRect(
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: Text(
+                    'slide to continue',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+              ),
+            AnimatedOpacity(
+              opacity: _showOrderText ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 250),
+              child: Text(
+                'Order',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+ 
+ //-----------------------Slider Button Widget-------------------------------------->>>>
+
+
+
